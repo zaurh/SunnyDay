@@ -9,10 +9,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ConditionImage(condition: Int, modifier: Modifier = Modifier){
+fun ConditionImage(condition: Int, modifier: Modifier = Modifier) {
     Image(
         contentScale = ContentScale.Crop,
         modifier = modifier.size(100.dp),
         painter = painterResource(condition),
-        contentDescription = "")
+        contentDescription = ""
+    )
 }

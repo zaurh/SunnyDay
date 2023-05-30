@@ -5,8 +5,8 @@ import com.example.sunnyday.data.remote.dto.WeatherDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface GeoApi {
-    @GET("current.json")
+interface WeatherApi {
+    @GET("forecast.json")
     suspend fun getGeo(
         @Query("q") q: String,
         @Query("lang") lang: String = "en",

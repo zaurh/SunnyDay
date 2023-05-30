@@ -1,11 +1,9 @@
 package com.example.sunnyday.di
 
-import android.app.Application
 import com.example.sunnyday.common.Constants.BASE_URL
-import com.example.sunnyday.data.remote.GeoApi
-import com.example.sunnyday.data.repository.GeoRepositoryImpl
-import com.example.sunnyday.domain.repository.GeoRepository
-import com.google.gson.Gson
+import com.example.sunnyday.data.remote.WeatherApi
+import com.example.sunnyday.data.repository.WeatherRepositoryImpl
+import com.example.sunnyday.domain.repository.WeatherRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,13 +28,13 @@ object AppModule {
     }
     @Singleton
     @Provides
-    fun provideRetrofitApi(retrofit: Retrofit): GeoApi{
-        return retrofit.create(GeoApi::class.java)
+    fun provideRetrofitApi(retrofit: Retrofit): WeatherApi{
+        return retrofit.create(WeatherApi::class.java)
     }
 
     //Repository
     @Singleton
     @Provides
-    fun provideRepository(api: GeoApi): GeoRepository = GeoRepositoryImpl(api)
+    fun provideRepository(api: WeatherApi): WeatherRepository = WeatherRepositoryImpl(api)
 
 }

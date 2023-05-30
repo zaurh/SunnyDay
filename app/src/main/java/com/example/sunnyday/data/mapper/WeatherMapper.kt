@@ -4,4 +4,4 @@ import com.example.sunnyday.data.remote.dto.WeatherDto
 import com.example.sunnyday.domain.model.WeatherModel
 
 
-fun WeatherDto.toWeatherModel() = WeatherModel(current, location)
+fun WeatherDto.toWeatherModel() = WeatherModel(current, location, forecast)

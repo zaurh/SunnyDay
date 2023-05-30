@@ -5,11 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -32,6 +33,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.sunnyday.R
 import com.example.sunnyday.presentation.MainViewModel
 import com.example.sunnyday.presentation.components.ConditionImage
+import com.example.sunnyday.presentation.components.ForecastItem
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -39,6 +43,7 @@ import com.example.sunnyday.presentation.components.ConditionImage
 fun MainScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
+    val forecast = viewModel.hour.value
     val weather = viewModel.state.value
     val hour = weather.weather?.current?.last_updated?.substring(11, 13)?.toInt()
     val conditionText = weather.weather?.current?.condition?.text
@@ -47,6 +52,7 @@ fun MainScreen(
 
 
     Box(modifier = Modifier.fillMaxSize()) {
+
         when (hour) {
             in 0..4 -> {
                 ConditionImage(condition = R.drawable.night, modifier = Modifier.fillMaxSize())
@@ -107,12 +113,22 @@ fun MainScreen(
 
             weather.weather?.let {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = it.location.country, color = if (hour in 5..16) {
-                            Color.Gray
-                        } else
-                            Color.LightGray
-                    )
+                    Row() {
+                        Text(
+                            text = it.location.country, color = if (hour in 5..16) {
+                                Color.Gray
+                            } else
+                                Color.LightGray
+                        )
+                        Text(
+                            text = " - ${it.location.localtime.substring(11)}",
+                            color = if (hour in 5..16) {
+                                Color.Gray
+                            } else
+                                Color.LightGray
+                        )
+                    }
+
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
@@ -123,19 +139,44 @@ fun MainScreen(
                             } else
                                 Color.White
                         )
+
                         Spacer(modifier = Modifier.size(10.dp))
                         ConditionImage(
                             condition = when (conditionText) {
-                                "Clear" -> R.drawable.cloudy
+                                "Clear" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_clear
+                                } else
+                                    R.drawable.day_clear
+
                                 "Sunny" -> R.drawable.day_clear
-                                "Partly cloudy" -> R.drawable.day_partial_cloud
+                                "Partly cloudy" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_partial_cloud
+                                } else
+                                    R.drawable.day_partial_cloud
+
                                 "Cloudy" -> R.drawable.cloudy
                                 "Overcast" -> R.drawable.angry_clouds
                                 "Mist" -> R.drawable.mist
-                                "Patchy rain possible" -> R.drawable.day_rain
-                                "Patchy snow possible" -> R.drawable.day_snow
-                                "Patchy sleet possible" -> R.drawable.day_sleet
-                                "Patchy freezing drizzle possible" -> R.drawable.day_snow
+                                "Patchy rain possible" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_rain
+                                } else
+                                    R.drawable.day_rain
+
+                                "Patchy snow possible" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_snow
+                                } else
+                                    R.drawable.day_snow
+
+                                "Patchy sleet possible" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_sleet
+                                } else
+                                    R.drawable.day_sleet
+
+                                "Patchy freezing drizzle possible" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_snow
+                                } else
+                                    R.drawable.day_snow
+
                                 "Thundery outbreaks possible" -> R.drawable.thunder
                                 "Blowing snow" -> R.drawable.snow
                                 "Blizzard" -> R.drawable.snow
@@ -145,28 +186,84 @@ fun MainScreen(
                                 "Light drizzle" -> R.drawable.rain
                                 "Freezing drizzle" -> R.drawable.snow
                                 "Heavy freezing drizzle" -> R.drawable.snow
-                                "Patchy light rain" -> R.drawable.day_rain
+                                "Patchy light rain" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_rain
+                                } else
+                                    R.drawable.day_rain
+
                                 "Light rain" -> R.drawable.rain
-                                "Moderate rain at times" -> R.drawable.day_rain
+                                "Moderate rain at times" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_rain
+                                } else
+                                    R.drawable.day_rain
+
                                 "Moderate rain" -> R.drawable.rain
-                                "Heavy rain at times" -> R.drawable.day_rain
-                                "Heavy rain" -> R.drawable.day_rain
+                                "Heavy rain at times" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_rain
+                                } else
+                                    R.drawable.day_rain
+
+                                "Heavy rain" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_rain
+                                } else
+                                    R.drawable.day_rain
+
                                 "Light freezing rain" -> R.drawable.snow
                                 "Moderate or heavy freezing rain" -> R.drawable.snow
                                 "Light sleet" -> R.drawable.day_sleet
                                 "Moderate or heavy sleet" -> R.drawable.day_sleet
-                                "Patchy light snow" -> R.drawable.day_snow
+                                "Patchy light snow" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_snow
+                                } else
+                                    R.drawable.day_snow
+
                                 "Light snow" -> R.drawable.snow
-                                "Patchy moderate snow" -> R.drawable.day_snow
-                                "Moderate snow" -> R.drawable.snow
-                                "Patchy heavy snow" -> R.drawable.day_snow
-                                "Heavy snow" -> R.drawable.snow
-                                "Ice pellets" -> R.drawable.snow
-                                "Light rain shower" -> R.drawable.day_rain
-                                "Moderate or heavy rain shower" -> R.drawable.day_rain
+                                "Patchy moderate snow" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_snow
+                                } else
+                                    R.drawable.day_snow
+
+                                "Moderate snow" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_snow
+                                } else
+                                    R.drawable.day_snow
+
+                                "Patchy heavy snow" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_snow
+                                } else
+                                    R.drawable.day_snow
+
+                                "Heavy snow" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_snow
+                                } else
+                                    R.drawable.day_snow
+
+                                "Ice pellets" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_snow
+                                } else
+                                    R.drawable.day_snow
+
+                                "Light rain shower" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_rain
+                                } else
+                                    R.drawable.day_rain
+
+                                "Moderate or heavy rain shower" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_rain
+                                } else
+                                    R.drawable.day_rain
+
                                 "Torrential rain shower" -> R.drawable.rain_thunder
-                                "Light sleet showers" -> R.drawable.day_sleet
-                                "Moderate or heavy sleet showers" -> R.drawable.day_sleet
+                                "Light sleet showers" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_sleet
+                                } else
+                                    R.drawable.day_sleet
+
+                                "Moderate or heavy sleet showers" -> if (hour in 0..5 || hour in 21..23) {
+                                    R.drawable.night_half_moon_sleet
+                                } else
+                                    R.drawable.day_sleet
+
                                 "Light snow showers" -> R.drawable.snow
                                 "Moderate or heavy snow showers" -> R.drawable.snow
                                 "Light showers of ice pellets" -> R.drawable.snow
@@ -200,6 +297,7 @@ fun MainScreen(
                     } else
                         Color.LightGray
                 )
+
                 Text(
                     text = "Wind : ${it.current.wind_kph} km/h",
                     color = if (hour in 5..16) {
@@ -214,9 +312,28 @@ fun MainScreen(
                     } else
                         Color.LightGray
                 )
-
+                Spacer(modifier = Modifier.size(30.dp))
+                Text(
+                    text = formatDate(it.current.last_updated),
+                    fontSize = 20.sp,
+                    color = if (hour in 5..16) {
+                        Color.Black
+                    } else
+                        Color.White
+                )
+                LazyRow(modifier = Modifier.size(500.dp)) {
+                    items(forecast) { hour ->
+                        ForecastItem(hourModel = hour)
+                    }
+                }
             }
+
+
         }
+
+
+
+
         FloatingActionButton(
             backgroundColor = when (hour) {
                 in 0..4 -> {
@@ -257,4 +374,14 @@ fun MainScreen(
             )
         }
     }
+}
+
+
+@Composable
+fun formatDate(date: String): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("MMMM d", Locale.getDefault())
+
+    val parsedDate = inputFormat.parse(date)
+    return outputFormat.format(parsedDate!!)
 }
