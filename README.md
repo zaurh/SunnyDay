@@ -4,7 +4,7 @@ API Source: weatherapi.com
 
 # Preview
 
-![App Screenshot](https://i.hizliresim.com/b58abmo.png)
+![App Screenshot](https://i.hizliresim.com/bt8cwqf.png)
 
 
 
