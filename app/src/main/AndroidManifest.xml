@@ -9,7 +9,7 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher_sunny"
+        android:icon="@mipmap/ic_launcher_sunny_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.SunnyDay"
@@ -17,7 +17,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.SunnyDay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

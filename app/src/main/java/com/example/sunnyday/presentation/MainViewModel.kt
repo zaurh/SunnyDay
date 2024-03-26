@@ -47,8 +47,8 @@ class MainViewModel @Inject constructor(
                             hour.value = i.hour
                         }
                     }
-
                     is Resource.Error -> {
+
                     }
 
                     is Resource.Loading -> {

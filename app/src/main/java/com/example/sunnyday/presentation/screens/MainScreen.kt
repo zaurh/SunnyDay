@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -22,20 +23,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.sunnyday.R
+import com.example.sunnyday.common.formatDate
 import com.example.sunnyday.presentation.MainViewModel
 import com.example.sunnyday.presentation.components.ConditionImage
 import com.example.sunnyday.presentation.components.ForecastItem
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -47,7 +49,8 @@ fun MainScreen(
     val weather = viewModel.state.value
     val hour = weather.weather?.current?.last_updated?.substring(11, 13)?.toInt()
     val conditionText = weather.weather?.current?.condition?.text
-    val focus = FocusRequester()
+    val focusRequester = FocusRequester()
+    val focus = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
 
@@ -79,6 +82,9 @@ fun MainScreen(
         ) {
 
             TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Search,
@@ -102,9 +108,8 @@ fun MainScreen(
                     } else
                         Color.White
                 ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(focus),
+                singleLine = true,
+                keyboardActions = KeyboardActions(onDone = {focus.clearFocus()}),
                 value = viewModel.searchQuery.value,
                 onValueChange = viewModel::onSearch,
                 placeholder = { Text(text = "Enter city...") }
@@ -113,7 +118,7 @@ fun MainScreen(
 
             weather.weather?.let {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Row() {
+                    Row {
                         Text(
                             text = it.location.country, color = if (hour in 5..16) {
                                 Color.Gray
@@ -332,8 +337,6 @@ fun MainScreen(
         }
 
 
-
-
         FloatingActionButton(
             backgroundColor = when (hour) {
                 in 0..4 -> {
@@ -357,7 +360,7 @@ fun MainScreen(
                 }
             },
             onClick = {
-                focus.requestFocus()
+                focusRequester.requestFocus()
                 keyboardController?.show()
                 viewModel.onSearch("")
             },
@@ -374,14 +377,4 @@ fun MainScreen(
             )
         }
     }
-}
-
-
-@Composable
-fun formatDate(date: String): String {
-    val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-    val outputFormat = SimpleDateFormat("MMMM d", Locale.getDefault())
-
-    val parsedDate = inputFormat.parse(date)
-    return outputFormat.format(parsedDate!!)
 }
