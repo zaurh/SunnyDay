@@ -1,3 +1,55 @@
 <resources>
     <string name="app_name">SunnyDay</string>
+
+    <!-- Weather screen -->
+    <string name="search_city">Search city</string>
+    <string name="unit_celsius">°C</string>
+    <string name="unit_fahrenheit">°F</string>
+    <string name="now">Now</string>
+    <string name="today">Today</string>
+    <string name="hourly_forecast">Hourly forecast</string>
+    <string name="daily_forecast">%1$d-day forecast</string>
+    <string name="high_low">H:%1$s  L:%2$s</string>
+    <string name="feels_like_short">Feels like %1$s</string>
+    <string name="feels_like">Feels like</string>
+    <string name="feels_colder">Wind chill makes it colder</string>
+    <string name="feels_warmer">Humidity makes it warmer</string>
+    <string name="feels_similar">Close to the actual</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind">Wind</string>
+    <string name="wind_kph">%1$d km/h</string>
+    <string name="wind_mph">%1$d mph</string>
+    <string name="uv_index">UV index</string>
+    <string name="uv_low">Low</string>
+    <string name="uv_moderate">Moderate</string>
+    <string name="uv_high">High</string>
+    <string name="uv_very_high">Very high</string>
+    <string name="uv_extreme">Extreme</string>
+    <string name="pressure">Pressure</string>
+    <string name="pressure_hpa">%1$d hPa</string>
+    <string name="visibility">Visibility</string>
+    <string name="distance_km">%1$d km</string>
+    <string name="distance_mi">%1$d mi</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
+    <string name="not_available">—</string>
+    <string name="last_updated">Updated %1$s</string>
+    <string name="powered_by">Powered by WeatherAPI.com</string>
+    <string name="retry">Try again</string>
+    <string name="change_city">Change city</string>
+
+    <!-- Search screen -->
+    <string name="search_placeholder">Search for a city</string>
+    <string name="search_hint_empty">Find any city in the world and check its weather</string>
+    <string name="recent_searches">Recent</string>
+    <string name="no_results">No cities found for “%1$s”</string>
+    <string name="remove_recent">Remove %1$s from recent</string>
+    <string name="back">Back</string>
+    <string name="clear">Clear</string>
+
+    <!-- Errors -->
+    <string name="error_no_internet">No internet connection. Check your connection and try again.</string>
+    <string name="error_location_not_found">We couldn’t find that location.</string>
+    <string name="error_server">The weather service is having trouble. Please try again later.</string>
+    <string name="error_unknown">Something went wrong. Please try again.</string>
 </resources>

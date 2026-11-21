@@ -2,6 +2,12 @@
 <resources>
 
     <style name="Theme.SunnyDay" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">#464d51</item>
+        <item name="android:windowBackground">@color/morning</item>
+    </style>
+
+    <style name="Theme.SunnyDay.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/morning</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.SunnyDay</item>
     </style>
 </resources>
