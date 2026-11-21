@@ -19,6 +19,12 @@ val weatherApiKey: String = localProperties.getProperty("WEATHER_API_KEY")
     ?: System.getenv("WEATHER_API_KEY")
     ?: ""
 
+// Release signing is read from keystore.properties (git-ignored). Without it, release builds are unsigned.
+val keystoreProperties = Properties().apply {
+    val file = rootProject.file("keystore.properties")
+    if (file.exists()) file.inputStream().use(::load)
+}
+
 android {
     namespace = "com.zaurh.sunnyday"
     compileSdk = 36
@@ -36,8 +42,20 @@ android {
         buildConfigField("String", "WEATHER_API_KEY", "\"$weatherApiKey\"")
     }
 
+    signingConfigs {
+        if (keystoreProperties.getProperty("storeFile") != null) {
+            create("release") {
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
